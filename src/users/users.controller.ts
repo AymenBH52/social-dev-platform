@@ -6,6 +6,10 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './entities/user.entity';
 import { ApiResponse } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
+import { RoleEnum } from './enums/enums';
+import { RolesGuard } from 'src/auth/guards/roles.guard';
+import { JwtGuard } from 'src/auth/guards/jwt.guard';
+import { Role } from 'src/auth/decorators/roles.decorator';
 
 @Controller('users')
 export class UsersController {
@@ -22,7 +26,8 @@ export class UsersController {
   }
 
   // Find all users
-  @UseGuards(AuthGuard('jwt'))
+  @Role(RoleEnum.ADMIN)
+  @UseGuards(JwtGuard, RolesGuard)
   @Get()
   @ApiResponse({ status: 200, description: 'Liste de tous les utilisateurs.' })
   async getUsers(): Promise<User[]> {
