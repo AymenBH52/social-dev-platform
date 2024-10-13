@@ -8,10 +8,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
 import { RolesGuard } from './auth/guards/roles.guard';
-// import { LocalStrategy } from './auth/strategies/local.strategy';
-// import { APP_GUARD } from '@nestjs/core';
-// import { JwtGuard } from './auth/guard/jwt.guard';
-// import { JwtStrategy } from './auth/strategies/jwt.strategy';
 
 @Module({
   imports: [

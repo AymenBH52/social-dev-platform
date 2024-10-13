@@ -34,7 +34,7 @@ export class UsersController {
     return this.usersService.findAll();
   }
   // Find user by id
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(JwtGuard)
   @Get(':id')
   @ApiResponse({ status: 200, description: "L'utilisateur trouvé." })
   @ApiResponse({ status: 404, description: 'Utilisateur non trouvé.' })
