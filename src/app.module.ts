@@ -4,27 +4,42 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './users/users.module';
-
-
-
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { AuthModule } from './auth/auth.module';
+// import { LocalStrategy } from './auth/strategies/local.strategy';
+// import { APP_GUARD } from '@nestjs/core';
+// import { JwtGuard } from './auth/guard/jwt.guard';
+// import { JwtStrategy } from './auth/strategies/jwt.strategy';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'mysql',
-      host: '127.0.0.1',
-      username: 'root',
-     // password: 'null',
-      port: 3306,
-      database: 'social_dev',  
-      entities: [__dirname + '/**/*.entity{.ts,.js}'],
-      synchronize: true,
+    ConfigModule.forRoot({
+      isGlobal: true,
     }),
-    
+    AuthModule,
     UsersModule,
-    
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        type: process.env.DB_TYPE as any,
+        host: configService.get<string>('DB_HOST'),
+        username: configService.get<string>('DB_USERNAME'),
+        password: configService.get<string>('DB_PASSWORD'),
+        port: configService.get<number>('DB_PORT'),
+        database: configService.get<string>('DB_NAME'),
+        entities: [__dirname + '/**/*.entity{.ts,.js}'],
+        synchronize: true,
+      }),
+      inject: [ConfigService],
+    }),
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    // {
+    //   provide: APP_GUARD,
+    //   useClass: JwtGuard,
+    // },
+  ],
 })
 export class AppModule {}

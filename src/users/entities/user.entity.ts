@@ -1,30 +1,31 @@
 /* eslint-disable prettier/prettier */
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Role } from './role.entity';
+import { RoleEnum } from '../enums/enums';
 
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  firstName: string;
+  @Column({ nullable: false, unique: true })
+  username: string;
 
   @Column()
-  lastName: string;
+  firstname: string;
 
   @Column()
+  lastname: string;
+
+  @Column({ nullable: false, unique: true })
   email: string;
 
-  @Column()
+  @Column({ nullable: false })
   password: string;
 
-  @Column()
-  role: string;
-
-  @Column()
+  @Column({ default: false })
   isActive: boolean;
 
-
-
-
+  @ManyToOne(() => Role, (role) => role.users, { eager: true })
+  role: Role;
 }

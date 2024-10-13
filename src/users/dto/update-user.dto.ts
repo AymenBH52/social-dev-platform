@@ -1,16 +1,27 @@
 /* eslint-disable prettier/prettier */
 
-
-import { IsString, IsEmail, IsOptional, MinLength, IsBoolean } from 'class-validator';
+import {
+  IsString,
+  IsEmail,
+  IsOptional,
+  MinLength,
+  IsBoolean,
+  IsEnum,
+} from 'class-validator';
+import { Role } from '../entities/role.entity';
 
 export class UpdateUserDto {
   @IsString()
   @IsOptional()
-  firstName?: string;
+  username?: string;
 
   @IsString()
   @IsOptional()
-  lastName?: string;
+  firstname?: string;
+
+  @IsString()
+  @IsOptional()
+  lastname?: string;
 
   @IsEmail()
   @IsOptional()
@@ -21,9 +32,9 @@ export class UpdateUserDto {
   @IsOptional()
   password?: string;
 
-  @IsString()
+  @IsEnum(Role)
   @IsOptional()
-  role?: string;
+  role?: Role;
 
   @IsBoolean()
   @IsOptional()

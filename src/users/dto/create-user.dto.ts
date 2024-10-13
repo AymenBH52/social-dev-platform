@@ -1,20 +1,43 @@
 /* eslint-disable prettier/prettier */
-import { IsString, IsEmail, IsNotEmpty, MinLength } from 'class-validator';
+import {
+  IsString,
+  IsEmail,
+  IsNotEmpty,
+  MinLength,
+  MaxLength,
+  IsEnum,
+  IsBoolean,
+} from 'class-validator';
+import { Role } from '../entities/role.entity';
+import { RoleEnum } from '../enums/enums';
 
 export class CreateUserDto {
   @IsString()
   @IsNotEmpty()
-  firstName: string;
+  username: string;
 
   @IsString()
   @IsNotEmpty()
-  lastName: string;
+  firstname: string;
+
+  @IsString()
+  @IsNotEmpty()
+  lastname: string;
 
   @IsEmail()
   email: string;
 
   @IsString()
   @MinLength(6)
+  @MaxLength(20)
   @IsNotEmpty()
   password: string;
+
+  @IsNotEmpty()
+  @IsEnum(RoleEnum)
+  @IsString()
+  role: RoleEnum;
+
+  @IsBoolean()
+  isActive: boolean;
 }
