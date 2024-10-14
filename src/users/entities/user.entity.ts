@@ -1,5 +1,8 @@
 /* eslint-disable prettier/prettier */
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Comment } from 'src/comments/entities/comment.entity';
+import { Like } from 'src/likes/entities/like.entity';
+import { Post } from 'src/posts/entities/post.entity';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class User {
@@ -24,7 +27,14 @@ export class User {
   @Column()
   isActive: boolean;
 
+  @OneToMany(() => Post, (post) => post.author)
+  posts: Post[];
 
+  @OneToMany(() => Comment, (comment) => comment.author)
+  comments: Comment[];
+
+  @OneToMany(() => Like, (like) => like.user)
+  likes: Like[];
 
 
 }
