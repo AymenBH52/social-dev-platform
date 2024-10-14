@@ -3,12 +3,15 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { JwtGuard } from './auth/guards/jwt.guard';
+import * as cookieParser from 'cookie-parser';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  // app.useGlobalGuards(new JwtGuard());
+  app.enableCors({
+    origin: process.env.CLIENT_URL,
+    credentials: true,
+  });
 
-  //Configuration Swagger
   const config = new DocumentBuilder()
     .setTitle('API social-dev') // Titre de votre API
     .setDescription("Documentation de l'API social-dev") // Description
@@ -17,9 +20,10 @@ async function bootstrap() {
 
   const document = SwaggerModule.createDocument(app, config);
 
+  app.use(cookieParser());
   SwaggerModule.setup('api', app, document);
 
   // app.useGlobalGuards(new JwtGuard(new Reflector()));
-  await app.listen(3000);
+  await app.listen(4000);
 }
 bootstrap();
