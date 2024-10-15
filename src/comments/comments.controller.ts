@@ -1,10 +1,16 @@
+import { Controller, Get, Post, Body, Patch, Param, Delete, Req, UseGuards} from '@nestjs/common';
+import { CommentsService } from './comments.service';
+import { CreateCommentDto } from './dto/create-comment.dto';
+import { PostsService } from 'src/posts/posts.service';
+import { Request } from 'express';
+
 
 export class CommentsController {
-  /* constructor(
+ /*  constructor(
     private readonly commentsService: CommentsService,
     private readonly postsService: PostsService,
   ) {}
-
+ 
   @Post()
   async create(
     @Param('postId') postId: number,
