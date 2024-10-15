@@ -1,12 +1,13 @@
 /* eslint-disable prettier/prettier */
 
+import { Role } from '../entities/role.entity';
 
 export class UserResponseDto {
-    id: number;
-    firstName: string;
-    lastName: string;
-    email: string;
-    role: string;
-    isActive: boolean;
-  }
-  
+  id: number;
+  username: string;
+  firstname: string;
+  lastname: string;
+  email: string;
+  role: Role;
+  isActive: boolean;
+}

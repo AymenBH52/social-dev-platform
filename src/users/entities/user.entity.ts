@@ -2,29 +2,31 @@
 import { Comment } from 'src/comments/entities/comment.entity';
 import { Like } from 'src/likes/entities/like.entity';
 import { Post } from 'src/posts/entities/post.entity';
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+
+import { Role } from './role.entity';
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  firstName: string;
+  @Column({ nullable: false, unique: true })
+  username: string;
 
   @Column()
-  lastName: string;
+  firstname: string;
 
   @Column()
+  lastname: string;
+
+  @Column({ nullable: false, unique: true })
   email: string;
 
-  @Column()
+  @Column({ nullable: false })
   password: string;
 
-  @Column()
-  role: string;
-
-  @Column()
+  @Column({ default: false })
   isActive: boolean;
 
   @OneToMany(() => Post, (post) => post.author)
@@ -37,4 +39,6 @@ export class User {
   likes: Like[];
 
 
+  @ManyToOne(() => Role, (role) => role.users, { eager: true })
+  role: Role;
 }
