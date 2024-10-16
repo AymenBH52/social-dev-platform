@@ -44,9 +44,7 @@ export class UsersService {
   }
   async createUser(createUserDto: CreateUserDto): Promise<User> {
     const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
-    const userRole = await this.roleRepository.findOne({
-      where: { name: createUserDto.role },
-    });
+
     const user = new User();
     user.username = createUserDto.username;
     user.firstname = createUserDto.firstname;
@@ -54,11 +52,16 @@ export class UsersService {
     user.email = createUserDto.email;
     user.password = hashedPassword;
 
-    if (userRole) user.role = userRole;
-    else {
-      const role = new Role();
-      role.name = RoleEnum.USER;
-      user.role = role;
+    if (createUserDto.role) {
+      const userRole = await this.roleRepository.findOne({
+        where: { name: createUserDto.role },
+      });
+      user.role = userRole;
+    } else {
+      const userRole = await this.roleRepository.findOne({
+        where: { name: RoleEnum.USER as RoleEnum },
+      });
+      user.role = userRole;
     }
     return this.userRepository.save(user);
   }
