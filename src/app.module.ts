@@ -9,6 +9,7 @@ import { AuthModule } from './auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
 import { RolesGuard } from './auth/guards/roles.guard';
 import { UsersService } from './users/users.service';
+import { MulterModule } from '@nestjs/platform-express';
 
 @Module({
   imports: [
@@ -31,6 +32,13 @@ import { UsersService } from './users/users.service';
       }),
       inject: [ConfigService],
     }),
+
+    
+    MulterModule.register({
+      dest: './uploads',  
+    }),
+
+    
   ],
   controllers: [AppController],
   providers: [

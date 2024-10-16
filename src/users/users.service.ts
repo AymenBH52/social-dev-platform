@@ -79,4 +79,21 @@ export class UsersService {
       }
     });
   }
+
+
+  //**Update user profile picture**
+  async updateUserProfilePicture(userId: string, imageUrl: string) {
+
+    const user = await this.userRepository.findOne({ where: { id: Number(userId) } });
+    if (!user) {
+      throw new Error('User not found');
+    }
+    user.profilePicture = imageUrl;  
+    await this.userRepository.save(user); 
+    return user;
+
+  }
+  //**Update user profile picture**
+
 }
+

@@ -26,6 +26,9 @@ export class User {
   @Column({ default: false })
   isActive: boolean;
 
+  @Column({ nullable: true }) 
+  profilePicture: string;
+
   @ManyToOne(() => Role, (role) => role.users, { eager: true })
   role: Role;
 }
