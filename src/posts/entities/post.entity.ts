@@ -1,25 +1,22 @@
-import { Comment } from "src/comments/entities/comment.entity";
-import { Like } from "src/likes/entities/like.entity";
-import { User } from "src/users/entities/user.entity";
-import { Column, Entity, ManyToOne, OneToMany } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Comment } from 'src/comment/entities/comment.entity';
 
 @Entity()
 export class Post {
-    @Column()
-    id:number;
+    @PrimaryGeneratedColumn()
+    id: number;
 
     @Column()
-    title:string;
-    
-    @Column()
-    content:string;
-    
-    @ManyToOne(() => User, (user) => user.posts)
-    author: User;
-  
+    content: string;
+
+    @Column({ default: () => 'CURRENT_TIMESTAMP' })
+    createdAt: Date;
+
+    @Column({ default: 0 })
+    likes: number;
+
+    @Column({ default: 0 })
+    dislikes: number;
     @OneToMany(() => Comment, (comment) => comment.post)
-    comments: Comment[];
-  
-    @OneToMany(() => Like, (like) => like.post)
-    likes: Like[];
+  comments: Comment[];
 }

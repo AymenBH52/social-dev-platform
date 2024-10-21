@@ -4,16 +4,15 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './users/users.module';
-<<<<<<< HEAD
 import { PostsModule } from './posts/posts.module';
-import { LikesModule } from './likes/likes.module';
-import { CommentsModule } from './comments/comments.module';
-=======
+
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
 import { RolesGuard } from './auth/guards/roles.guard';
->>>>>>> 75665d794d0dba68f2324ff8afe945a1d1214c2b
+import { PostGateway } from './chat/PostGateway';
+import { CommentModule } from './comment/comment.module';
+
 
 @Module({
   imports: [
@@ -22,15 +21,11 @@ import { RolesGuard } from './auth/guards/roles.guard';
     }),
     AuthModule,
     UsersModule,
-<<<<<<< HEAD
     
     PostsModule,
     
-    LikesModule,
+    CommentModule,
     
-    CommentsModule,
-    
-=======
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
@@ -41,11 +36,14 @@ import { RolesGuard } from './auth/guards/roles.guard';
         port: configService.get<number>('DB_PORT'),
         database: configService.get<string>('DB_NAME'),
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
-        synchronize: true,
+        synchronize: false,
       }),
       inject: [ConfigService],
     }),
->>>>>>> 75665d794d0dba68f2324ff8afe945a1d1214c2b
+    
+  
+    
+
   ],
   controllers: [AppController],
   providers: [
@@ -54,6 +52,7 @@ import { RolesGuard } from './auth/guards/roles.guard';
       provide: APP_GUARD,
       useClass: RolesGuard,
     },
+    PostGateway,
   ],
 })
 export class AppModule {}

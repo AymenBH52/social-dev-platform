@@ -1,9 +1,15 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { PostsService } from './posts.service';
-import { PostsController } from './posts.controller';
+import { Post } from './entities/post.entity';
+import { CommentModule } from '../comment/comment.module';
 
 @Module({
-  controllers: [PostsController],
+  imports: [
+    TypeOrmModule.forFeature([Post]),
+    forwardRef(() => CommentModule), // Utiliser forwardRef ici
+  ],
   providers: [PostsService],
+  exports: [PostsService],
 })
 export class PostsModule {}

@@ -43,6 +43,7 @@ export class UsersService {
     });
   }
   async createUser(createUserDto: CreateUserDto): Promise<User> {
+    console.log(createUserDto)
     const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
     const userRole = await this.roleRepository.findOne({
       where: { name: createUserDto.role },

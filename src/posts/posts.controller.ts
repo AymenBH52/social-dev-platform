@@ -1,31 +1,32 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Body, Controller, Get, NotFoundException, Param, Patch, Post } from '@nestjs/common';
 import { PostsService } from './posts.service';
-import { CreatePostDto } from './dto/create-post.dto';
-import { UpdatePostDto } from './dto/update-post.dto';
-import { User } from 'src/users/entities/user.entity';
-
-
+import { Post as PostEntity } from './entities/post.entity';
+import { Comment } from 'src/comment/entities/comment.entity';
 @Controller('posts')
 export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
-  @Post()
-  create(@Body() createPostDto: CreatePostDto, @CurrentUser() user: User) {
-    return this.postsService.create(createPostDto, user);
+  /* @Post()
+  async create(@Body('content') content: string): Promise<PostEntity> {
+    return this.postsService.createPost(content);
   }
 
   @Get()
-  findAll() {
+  async findAll(): Promise<PostEntity[]> {
     return this.postsService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.postsService.findOne(+id);
+  // Endpoint pour ajouter un like à un post
+  @Patch(':id/like')
+  async likePost(@Param('id') id: number): Promise<PostEntity> {
+    return this.postsService.likePost(id);
   }
-
+   // Endpoint pour ajouter un dislike à un post
+   @Patch(':id/dislike')
+   async dislikePost(@Param('id') id: number): Promise<PostEntity> {
+    
+     return  this.postsService.dislikePost(id);
+     
+   }
+ */
 }
-function CurrentUser(): (target: PostsController, propertyKey: "create", parameterIndex: 1) => void {
-  throw new Error('Function not implemented.');
-}
-
