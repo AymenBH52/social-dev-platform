@@ -49,7 +49,7 @@ export class UsersController {
 
 
 //**Update user profile picture**
-  @Post(':id/upload-profile-picture')
+/*   @Post(':id/upload-profile-picture')
   @UseInterceptors(FileInterceptor('file', {
     storage: diskStorage({
       destination: './uploads/profile-pictures',  
@@ -59,12 +59,12 @@ export class UsersController {
         cb(null, `${uniqueSuffix}${ext}`); 
       },
     }),
-  }))
-  async uploadProfilePicture(@Param('id') userId: string, @UploadedFile() file: Express.Multer.File) {
+  })) */
+ /*  async uploadProfilePicture(@Param('id') userId: string, @UploadedFile() file: Express.Multer.File) {
     const imageUrl = `/uploads/profile-pictures/${file.filename}`;
     await this.usersService.updateUserProfilePicture(userId, imageUrl);  
     return { imageUrl, message: 'Profile picture uploaded successfully' };
-  }
+  } */
 //**Update user profile picture**
 
 }

@@ -10,13 +10,12 @@ export class CommentService {
     private readonly commentRepository: Repository<Comment>,
   ) {}
 
-  // Méthode pour créer un commentaire
   async create(content: string): Promise<Comment> {
-    const comment = this.commentRepository.create({ content }); // Assurez-vous que 'content' est une propriété de Comment
+    const comment = this.commentRepository.create({ content }); 
     return this.commentRepository.save(comment);
   }
 
-  // Méthode pour récupérer tous les commentaires
+  
   async findAll(): Promise<Comment[]> {
     return this.commentRepository.find();
   }

@@ -35,12 +35,12 @@ import { MulterModule } from '@nestjs/platform-express';
         port: configService.get<number>('DB_PORT'),
         database: configService.get<string>('DB_NAME'),
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
-        synchronize: true, // Vous pouvez le passer à false en production
+        synchronize: true
       }),
       inject: [ConfigService],
     }),
 
-    // Configuration de Multer pour le téléversement de fichiers
+    
     MulterModule.register({
       dest: './uploads',
     }),

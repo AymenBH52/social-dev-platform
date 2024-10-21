@@ -7,7 +7,7 @@ import { CommentModule } from '../comment/comment.module';
 @Module({
   imports: [
     TypeOrmModule.forFeature([Post]),
-    forwardRef(() => CommentModule), // Utiliser forwardRef ici
+    forwardRef(() => CommentModule), 
   ],
   providers: [PostsService],
   exports: [PostsService],
