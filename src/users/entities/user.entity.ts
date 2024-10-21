@@ -1,8 +1,6 @@
 /* eslint-disable prettier/prettier */
 
 
-
-
 import { Role } from './role.entity';
 import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
@@ -29,6 +27,8 @@ export class User {
   @Column({ default: false })
   isActive: boolean;
 
+  @Column({ nullable: true }) 
+  profilePicture: string;
 
   @ManyToOne(() => Role, (role) => role.users, { eager: true })
   role: Role;

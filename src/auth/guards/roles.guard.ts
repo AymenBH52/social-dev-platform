@@ -1,7 +1,7 @@
 import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { ROLE_KEY } from '../decorators/roles.decorator';
-import { RoleEnum } from 'src/users/enums/enums';
+import { RoleEnum, RoleHierarchy } from 'src/users/enums/enums';
 import { AuthGuard } from '@nestjs/passport';
 
 @Injectable()
@@ -21,7 +21,8 @@ export class RolesGuard extends AuthGuard('jwt') implements CanActivate {
 
       return true;
     }
+    const userRoles = RoleHierarchy[user.role.name];
 
-    return requiredRole === user.role.name;
+    return userRoles.includes(requiredRole);
   }
 }

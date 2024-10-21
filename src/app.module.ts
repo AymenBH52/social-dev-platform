@@ -1,18 +1,18 @@
 /* eslint-disable prettier/prettier */
-import { Module } from '@nestjs/common';
+import { Module, OnModuleInit } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './users/users.module';
 import { PostsModule } from './posts/posts.module';
-
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
 import { RolesGuard } from './auth/guards/roles.guard';
 import { PostGateway } from './chat/PostGateway';
 import { CommentModule } from './comment/comment.module';
-
+import { UsersService } from './users/users.service';
+import { MulterModule } from '@nestjs/platform-express';
 
 @Module({
   imports: [
@@ -21,11 +21,10 @@ import { CommentModule } from './comment/comment.module';
     }),
     AuthModule,
     UsersModule,
-    
     PostsModule,
-    
     CommentModule,
     
+    // Configuration de TypeORM
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
@@ -36,14 +35,15 @@ import { CommentModule } from './comment/comment.module';
         port: configService.get<number>('DB_PORT'),
         database: configService.get<string>('DB_NAME'),
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
-        synchronize: false,
+        synchronize: true, // Vous pouvez le passer à false en production
       }),
       inject: [ConfigService],
     }),
-    
-  
-    
 
+    // Configuration de Multer pour le téléversement de fichiers
+    MulterModule.register({
+      dest: './uploads',
+    }),
   ],
   controllers: [AppController],
   providers: [
@@ -55,4 +55,11 @@ import { CommentModule } from './comment/comment.module';
     PostGateway,
   ],
 })
-export class AppModule {}
+export class AppModule implements OnModuleInit {
+  constructor(private readonly userS: UsersService) {}
+
+  async onModuleInit() {
+    console.log('Adding roles to db');
+    await this.userS.addRolesToDb();
+  }
+}
