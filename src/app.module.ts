@@ -4,10 +4,13 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './users/users.module';
+import { PostsModule } from './posts/posts.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
 import { RolesGuard } from './auth/guards/roles.guard';
+import { PostGateway } from './chat/PostGateway';
+import { CommentModule } from './comment/comment.module';
 import { MulterModule } from '@nestjs/platform-express';
 import { UsersService } from './users/services/users.service';
 
@@ -18,6 +21,10 @@ import { UsersService } from './users/services/users.service';
     }),
     AuthModule,
     UsersModule,
+    PostsModule,
+    CommentModule,
+
+    // Configuration de TypeORM
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
@@ -44,6 +51,7 @@ import { UsersService } from './users/services/users.service';
       provide: APP_GUARD,
       useClass: RolesGuard,
     },
+    PostGateway,
   ],
 })
 export class AppModule implements OnModuleInit {

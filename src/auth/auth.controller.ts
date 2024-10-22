@@ -11,7 +11,7 @@ import {
 
 import { AuthService } from './auth.service';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
-import { AuthGuard } from '@nestjs/passport';
+
 import { RegisterResponse } from './types/UserResponse.type';
 import { LocalGuard } from './guards/local.guard';
 import { JwtGuard } from './guards/jwt.guard';
@@ -39,7 +39,7 @@ export class AuthController {
   getProfile(@Request() req) {
     return req.user;
   }
-
+ 
   @Post('register')
   async register(
     @Body() registerBody: CreateUserDto,
