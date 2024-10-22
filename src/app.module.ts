@@ -8,8 +8,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
 import { RolesGuard } from './auth/guards/roles.guard';
-import { UsersService } from './users/users.service';
 import { MulterModule } from '@nestjs/platform-express';
+import { UsersService } from './users/services/users.service';
 
 @Module({
   imports: [
@@ -33,12 +33,9 @@ import { MulterModule } from '@nestjs/platform-express';
       inject: [ConfigService],
     }),
 
-    
     MulterModule.register({
-      dest: './uploads',  
+      dest: './uploads',
     }),
-
-    
   ],
   controllers: [AppController],
   providers: [
