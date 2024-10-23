@@ -1,40 +1,50 @@
+import {
+  WebSocketGateway,
+  WebSocketServer,
+  SubscribeMessage,
+  MessageBody,
+} from '@nestjs/websockets';
+import { PostsService } from '../posts/posts.service';
+
 @WebSocketGateway(8001, { cors: '*' })
 export class PostGateway {
-    @WebSocketServer()
-    server;
+  @WebSocketServer()
+  server;
 
-    constructor(private readonly postService: PostsService) {}
+  constructor(private readonly postService: PostsService) {}
 
-    @SubscribeMessage('message')
-    async handleMessage(@MessageBody() data: { content: string; userId: number }): Promise<void> {
-        if (!data.content || typeof data.content !== 'string') {
-            throw new Error('Invalid content');
-        }
 
-        // Assurez-vous de récupérer l'utilisateur ici en fonction de userId
-        const user = await this.userService.findById(data.userId); // Exemple
-        const newPost = await this.postService.createPost(data.content, user);
-        this.server.emit('message', newPost);
-    }
+  @SubscribeMessage('message')
+  async handleMessage(@MessageBody() content: string): Promise<void> {
+    const newPost = await this.postService.createPost(content);
+    this.server.emit('message', newPost);
+  }
 
-    @SubscribeMessage('likePost')
-    async handleLikePost(@MessageBody() data: { postId: number; userId: number }): Promise<void> {
-        const user = await this.userService.findById(data.userId); // Exemple
-        const updatedPost = await this.postService.likePost(data.postId, user);
-        this.server.emit('postLiked', updatedPost);
-    }
+  @SubscribeMessage('fetchPosts')
+  async handleFetchPosts(): Promise<void> {
+    const posts = await this.postService.findAll();
+    this.server.emit('posts', posts);
+  }
 
-    @SubscribeMessage('dislikePost')
-    async handleDislikePost(@MessageBody() data: { postId: number; userId: number }): Promise<void> {
-        const user = await this.userService.findById(data.userId); // Exemple
-        const updatedPost = await this.postService.dislikePost(data.postId, user);
-        this.server.emit('postDisliked', updatedPost);
-    }
+  @SubscribeMessage('likePost')
+  async handleLikePost(@MessageBody() postId: number): Promise<void> {
+    const updatedPost = await this.postService.likePost(postId);
+    this.server.emit('postLiked', updatedPost); 
+  }
 
-    @SubscribeMessage('addComment')
-    async handleAddComment(
-        @MessageBody() data: { postId: number; content: string; userId: number }
-    ): Promise<void> {
-        // Ajoutez ici la logique pour l'ajout de commentaires en fonction de l'utilisateur
-    }
+ 
+  @SubscribeMessage('dislikePost')
+  async handleDislikePost(@MessageBody() postId: number): Promise<void> {
+    const updatedPost = await this.postService.dislikePost(postId);
+    this.server.emit('postDisliked', updatedPost);
+  }
+
+
+  @SubscribeMessage('addComment')
+  async handleAddComment(
+    @MessageBody() data: { postId: number; content: string }
+  ): Promise<void> {
+    const newComment = await this.postService.addComment(data.postId, data.content);
+    this.server.emit('commentAdded', newComment); 
+  }
 }

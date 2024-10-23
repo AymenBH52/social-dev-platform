@@ -4,7 +4,7 @@ import { Comment } from './entities/comment.entity';
 
 @Controller('comments')
 export class CommentController {
-  constructor(private readonly commentService: CommentService) {}
+ /*  constructor(private readonly commentService: CommentService) {}
 
   // Route pour créer un commentaire
   @Post()
@@ -16,5 +16,5 @@ export class CommentController {
   @Get()
   async findAll(): Promise<Comment[]> {
     return this.commentService.findAll();
-  }
+  } */
 }
