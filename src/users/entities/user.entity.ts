@@ -1,8 +1,14 @@
 /* eslint-disable prettier/prettier */
-
-
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Role } from './role.entity';
-import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { RoleEnum } from '../enums/enums';
+import { Experience } from './experience.entity';
 
 @Entity()
 export class User {
@@ -27,9 +33,30 @@ export class User {
   @Column({ default: false })
   isActive: boolean;
 
-  @Column({ nullable: true }) 
+  @Column({ nullable: true })
   profilePicture: string;
+
+  @Column()
+  state: string;
+
+  @Column()
+  stateid: string;
+
+  @Column()
+  country: string;
+
+  @Column()
+  countryid: string;
+
+  @Column()
+  jobTitle: string;
+
+  @Column({ nullable: true })
+  about: string;
 
   @ManyToOne(() => Role, (role) => role.users, { eager: true })
   role: Role;
+
+  @OneToMany(() => Experience, (experience) => experience.user, { eager: true })
+  experiences: Experience[];
 }

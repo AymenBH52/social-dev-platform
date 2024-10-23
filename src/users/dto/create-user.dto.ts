@@ -7,9 +7,13 @@ import {
   MaxLength,
   IsEnum,
   IsBoolean,
+  IsOptional,
+  ValidateNested,
 } from 'class-validator';
 import { Role } from '../entities/role.entity';
 import { RoleEnum } from '../enums/enums';
+import { Type } from 'class-transformer';
+import { CreateExperienceDto } from './create-experience.dto';
 
 export class CreateUserDto {
   @IsString()
@@ -40,4 +44,37 @@ export class CreateUserDto {
 
   @IsBoolean()
   isActive: boolean;
+
+  @IsString()
+  @IsOptional()
+  profilePicture?: string;
+
+  @IsString()
+  @IsOptional()
+  state?: string;
+
+  @IsString()
+  @IsOptional()
+  stateid?: string;
+
+  @IsString()
+  @IsOptional()
+  country?: string;
+
+  @IsString()
+  @IsOptional()
+  countryid?: string;
+
+  @IsString()
+  @IsOptional()
+  jobTitle?: string;
+
+  @IsString()
+  @IsOptional()
+  about?: string;
+
+  @ValidateNested({ each: true })
+  @Type(() => CreateExperienceDto)
+  @IsOptional()
+  experiences?: CreateExperienceDto[];
 }

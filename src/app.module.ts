@@ -11,8 +11,8 @@ import { APP_GUARD } from '@nestjs/core';
 import { RolesGuard } from './auth/guards/roles.guard';
 import { PostGateway } from './chat/PostGateway';
 import { CommentModule } from './comment/comment.module';
-import { UsersService } from './users/users.service';
 import { MulterModule } from '@nestjs/platform-express';
+import { UsersService } from './users/services/users.service';
 
 @Module({
   imports: [
@@ -23,7 +23,7 @@ import { MulterModule } from '@nestjs/platform-express';
     UsersModule,
     PostsModule,
     CommentModule,
-    
+
     // Configuration de TypeORM
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
@@ -35,12 +35,11 @@ import { MulterModule } from '@nestjs/platform-express';
         port: configService.get<number>('DB_PORT'),
         database: configService.get<string>('DB_NAME'),
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
-        synchronize: true
+        synchronize: true,
       }),
       inject: [ConfigService],
     }),
 
-    
     MulterModule.register({
       dest: './uploads',
     }),
