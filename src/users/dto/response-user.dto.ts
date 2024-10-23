@@ -10,4 +10,12 @@ export class UserResponseDto {
   email: string;
   role: Role;
   isActive: boolean;
+
+  profilePicture: string;
+  state: string;
+  stateid: string;
+  country: string;
+  countryid: string;
+  jobTitle: string;
+  about: string;
 }

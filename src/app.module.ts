@@ -4,12 +4,15 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './users/users.module';
+import { PostsModule } from './posts/posts.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
 import { RolesGuard } from './auth/guards/roles.guard';
-import { UsersService } from './users/users.service';
+import { PostGateway } from './chat/PostGateway';
+import { CommentModule } from './comment/comment.module';
 import { MulterModule } from '@nestjs/platform-express';
+import { UsersService } from './users/services/users.service';
 
 @Module({
   imports: [
@@ -18,6 +21,10 @@ import { MulterModule } from '@nestjs/platform-express';
     }),
     AuthModule,
     UsersModule,
+    PostsModule,
+    CommentModule,
+
+    // Configuration de TypeORM
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
@@ -33,12 +40,9 @@ import { MulterModule } from '@nestjs/platform-express';
       inject: [ConfigService],
     }),
 
-    
     MulterModule.register({
-      dest: './uploads',  
+      dest: './uploads',
     }),
-
-    
   ],
   controllers: [AppController],
   providers: [
@@ -47,6 +51,7 @@ import { MulterModule } from '@nestjs/platform-express';
       provide: APP_GUARD,
       useClass: RolesGuard,
     },
+    PostGateway,
   ],
 })
 export class AppModule implements OnModuleInit {
